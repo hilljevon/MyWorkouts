@@ -7,10 +7,12 @@ import Image from "next/image"
 import Link from "next/link"
 import {
   ActivityIcon,
+  Check,
   ChevronLeft,
   ChevronRight,
   Copy,
   CreditCard,
+  Edit2Icon,
   File,
 
   HomeIcon,
@@ -93,12 +95,61 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
+import { getAllRecentWorkouts } from "@/lib/actions/calls";
+import { DashboardWorkoutTableInterface, SupabaseUserInterface, WorkoutExercisesInterface } from "@/lib/interfaces";
+import NewWorkoutForm from "@/components/forms/NewWorkoutForm";
+// const workoutTableData = [
+//   {
+//     splits: ['Back', 'Biceps'],
+//     date: '2024 March 29',
+//     calories: 400,
+//     id: '1',
+//     duration: 60
+//   },
+//   {
+//     splits: ['Chest', 'Triceps'],
+//     date: '2024 March 23',
+//     calories: 1020,
+//     id: '2',
+//     duration: 70
+//   },
+//   {
+//     splits: ['Back', 'Biceps'],
+//     date: '2024 March 22',
+//     calories: 703,
+//     id: '3',
+//     duration: 72
+//   },
+//   {
+//     splits: ['Back', 'Biceps'],
+//     date: '2024 March 21',
+//     calories: 553,
+//     id: '4',
+//     duration: 67
+//   },
+// ]
+interface DashboardWorkoutData {
+  workouts: DashboardWorkoutTableInterface[] | null,
+  user: SupabaseUserInterface | null,
+  workoutExercises: WorkoutExercisesInterface[] | null
+}
+interface WorkoutOverviewInterface {
+  id: string,
+  created_at: string,
+  workout_id: string,
+  exercise_id: string,
+  reps: number | null,
+  sets: number | null,
+  weight: number | null,
+  distance: number | null,
+  time: number | null,
+}
 export default async function Home() {
-  const supabase = createClient();
-
-  const { data: { user } } = await supabase.auth.getUser();
-
-  if (!user) { return redirect("/login"); }
+  const { workouts, user, workoutExercises } = await getAllRecentWorkouts() as DashboardWorkoutData
+  if (!workouts) redirect('/login')
+  console.log('MY WORKOUTS HERE', workouts)
+  console.log('MY WORKOUT EXERCISES HERE', workoutExercises)
+  console.log('MY USER HERE', user)
   return (
     <>
       <div className="flex min-h-screen w-full flex-col bg-muted/40">
@@ -131,7 +182,7 @@ export default async function Home() {
                     <span className="sr-only">Workouts</span>
                   </Link>
                 </TooltipTrigger>
-                <TooltipContent side="right">Orders</TooltipContent>
+                <TooltipContent side="right">Workouts</TooltipContent>
               </Tooltip>
             </TooltipProvider>
             {/* exercises icon */}
@@ -309,32 +360,27 @@ export default async function Home() {
               <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
                 <Card className="sm:col-span-2">
                   <CardHeader className="pb-3">
-                    <CardTitle>Your Workouts</CardTitle>
+                    <CardTitle>Next up: Back + Bi</CardTitle>
                     <CardDescription className="max-w-lg text-balance leading-relaxed">
                       A dynamic dashboard to view all of your gym analytics
                     </CardDescription>
                   </CardHeader>
-                  <CardFooter>
+                  <CardFooter className="pt-8">
                     <Sheet>
-                      <SheetTrigger >
+                      <SheetTrigger className="basic-button" >
                         Create New Workout
                       </SheetTrigger>
-                      <SheetContent>
-                        <SheetHeader>
-                          <SheetTitle>New Workout</SheetTitle>
-                          <SheetDescription>
-                            Lorem ipsum, dolor sit amet consectetur adipisicing.
-                          </SheetDescription>
-                        </SheetHeader>
+                      <SheetContent side='bottom'>
+                        <SheetTitle>New Workout</SheetTitle>
+                        <NewWorkoutForm />
                       </SheetContent>
                     </Sheet>
-
                   </CardFooter>
                 </Card>
                 <Card>
                   <CardHeader className="pb-2">
-                    <CardDescription>This Week</CardDescription>
-                    <CardTitle className="text-4xl">$1329</CardTitle>
+                    <CardDescription>Workouts</CardDescription>
+                    <CardTitle className="text-4xl">3/5</CardTitle>
                   </CardHeader>
                   <CardContent>
                     <div className="text-xs text-muted-foreground">
@@ -342,21 +388,21 @@ export default async function Home() {
                     </div>
                   </CardContent>
                   <CardFooter>
-                    <Progress value={25} aria-label="25% increase" />
+                    <Progress value={75} aria-label="25% increase" />
                   </CardFooter>
                 </Card>
                 <Card>
                   <CardHeader className="pb-2">
-                    <CardDescription>This Month</CardDescription>
-                    <CardTitle className="text-3xl">$5,329</CardTitle>
+                    <CardDescription>Calories</CardDescription>
+                    <CardTitle className="text-3xl">1367</CardTitle>
                   </CardHeader>
                   <CardContent>
                     <div className="text-xs text-muted-foreground">
-                      +10% from last month
+                      +10% from last week
                     </div>
                   </CardContent>
                   <CardFooter>
-                    <Progress value={12} aria-label="12% increase" />
+                    <Progress value={57} aria-label="12% increase" />
                   </CardFooter>
                 </Card>
               </div>
@@ -406,50 +452,58 @@ export default async function Home() {
                 <TabsContent value="week">
                   <Card>
                     <CardHeader className="px-7">
-                      <CardTitle>Orders</CardTitle>
+                      <CardTitle>Workouts</CardTitle>
                       <CardDescription>
-                        Recent orders from your store.
+                        Recent Workouts from your log.
                       </CardDescription>
                     </CardHeader>
                     <CardContent>
+                      {/* Workouts table */}
                       <Table>
                         <TableHeader>
                           <TableRow>
-                            <TableHead>Customer</TableHead>
+                            <TableHead>Day</TableHead>
+                            {/* <TableHead className="hidden sm:table-cell">
+                              Date
+                            </TableHead> */}
                             <TableHead className="hidden sm:table-cell">
-                              Type
-                            </TableHead>
-                            <TableHead className="hidden sm:table-cell">
-                              Status
+                              Duration
                             </TableHead>
                             <TableHead className="hidden md:table-cell">
-                              Date
+                              Calories
                             </TableHead>
-                            <TableHead className="text-right">Amount</TableHead>
+                            <TableHead className="">Cardio</TableHead>
                           </TableRow>
                         </TableHeader>
                         <TableBody>
-                          <TableRow className="bg-accent">
-                            <TableCell>
-                              <div className="font-medium">Liam Johnson</div>
-                              <div className="hidden text-sm text-muted-foreground md:inline">
-                                liam@example.com
-                              </div>
-                            </TableCell>
-                            <TableCell className="hidden sm:table-cell">
-                              Sale
-                            </TableCell>
-                            <TableCell className="hidden sm:table-cell">
-                              <Badge className="text-xs" variant="secondary">
-                                Fulfilled
-                              </Badge>
-                            </TableCell>
-                            <TableCell className="hidden md:table-cell">
-                              2023-06-23
-                            </TableCell>
-                            <TableCell className="text-right">$250.00</TableCell>
-                          </TableRow>
-                          <TableRow>
+                          {workouts.map((workout: DashboardWorkoutTableInterface) => (
+                            <TableRow key={workout.id} className="bg-accent">
+                              <TableCell>
+                                <div className="font-medium text-md">
+                                  {workout.splits.join(' + ')}
+                                </div>
+                                <div className="hidden text-xs text-muted-foreground md:inline">
+                                  {workout.date}
+                                </div>
+                              </TableCell>
+                              <TableCell className="hidden sm:table-cell">
+                                {workout.duration}
+                              </TableCell>
+                              <TableCell className="hidden sm:table-cell">
+                                <Badge className="text-xs" variant="secondary">
+                                  {workout.calories}
+                                </Badge>
+                              </TableCell>
+                              {/* <TableCell className="hidden md:table-cell">
+                                2023-06-23
+                              </TableCell> */}
+                              <TableCell className="text-right">
+                                <Check className="text-right" />
+                              </TableCell>
+                            </TableRow>
+                          ))}
+
+                          {/* <TableRow>
                             <TableCell>
                               <div className="font-medium">Olivia Smith</div>
                               <div className="hidden text-sm text-muted-foreground md:inline">
@@ -588,7 +642,7 @@ export default async function Home() {
                               2023-06-26
                             </TableCell>
                             <TableCell className="text-right">$450.00</TableCell>
-                          </TableRow>
+                          </TableRow> */}
                         </TableBody>
                       </Table>
                     </CardContent>
@@ -601,7 +655,7 @@ export default async function Home() {
                 <CardHeader className="flex flex-row items-start bg-muted/50">
                   <div className="grid gap-0.5">
                     <CardTitle className="group flex items-center gap-2 text-lg">
-                      Order ID: Oe31b70H
+                      Last Workout: {workouts[0].splits.join('/')}
                       <Button
                         size="icon"
                         variant="outline"
@@ -611,13 +665,13 @@ export default async function Home() {
                         <span className="sr-only">Copy Order ID</span>
                       </Button>
                     </CardTitle>
-                    <CardDescription>Date: November 23, 2023</CardDescription>
+                    <CardDescription>Date: {workouts[0].date}</CardDescription>
                   </div>
                   <div className="ml-auto flex items-center gap-1">
                     <Button size="sm" variant="outline" className="h-8 gap-1">
-                      <Truck className="h-3.5 w-3.5" />
+                      <Edit2Icon className="h-3.5 w-3.5" />
                       <span className="lg:sr-only xl:not-sr-only xl:whitespace-nowrap">
-                        Track Order
+                        Edit
                       </span>
                     </Button>
                     <DropdownMenu>
@@ -628,7 +682,6 @@ export default async function Home() {
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
-                        <DropdownMenuItem>Edit</DropdownMenuItem>
                         <DropdownMenuItem>Export</DropdownMenuItem>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem>Trash</DropdownMenuItem>
@@ -638,43 +691,48 @@ export default async function Home() {
                 </CardHeader>
                 <CardContent className="p-6 text-sm">
                   <div className="grid gap-3">
-                    <div className="font-semibold">Order Details</div>
+                    <div className="font-semibold">Strength and Conditioning</div>
                     <ul className="grid gap-3">
-                      <li className="flex items-center justify-between">
-                        <span className="text-muted-foreground">
-                          Glimmer Lamps x <span>2</span>
-                        </span>
-                        <span>$250.00</span>
-                      </li>
-                      <li className="flex items-center justify-between">
-                        <span className="text-muted-foreground">
-                          Aqua Filters x <span>1</span>
-                        </span>
-                        <span>$49.00</span>
-                      </li>
+                      {workouts[0].workoutExercises.map((workoutExercise: WorkoutOverviewInterface) => (
+                        <li key={workoutExercise.id} className="flex items-center justify-between">
+                          <span className="text-muted-foreground">
+                            {workoutExercise.exercise_id} <span className="text-xs text-slate-400"> {workoutExercise.sets} x {workoutExercise.reps} </span>
+                          </span>
+                          <span> {workoutExercise.weight} lbs </span>
+                        </li>
+                      ))}
                     </ul>
                     <Separator className="my-2" />
                     <ul className="grid gap-3">
+                      <div className="font-semibold">Statistics</div>
                       <li className="flex items-center justify-between">
-                        <span className="text-muted-foreground">Subtotal</span>
-                        <span>$299.00</span>
+                        <span className="text-muted-foreground">
+                          Calories Burned
+                        </span>
+                        <span>
+                          {workouts[0].calories}
+                        </span>
                       </li>
                       <li className="flex items-center justify-between">
-                        <span className="text-muted-foreground">Shipping</span>
-                        <span>$5.00</span>
+                        <span className="text-muted-foreground">
+                          Duration
+                        </span>
+                        <span>
+                          {workouts[0].duration}
+                        </span>
                       </li>
                       <li className="flex items-center justify-between">
-                        <span className="text-muted-foreground">Tax</span>
-                        <span>$25.00</span>
-                      </li>
-                      <li className="flex items-center justify-between font-semibold">
-                        <span className="text-muted-foreground">Total</span>
-                        <span>$329.00</span>
+                        <span className="text-muted-foreground">
+                          Average Heart Rate
+                        </span>
+                        <span>
+                          {workouts[0].avg_hr}
+                        </span>
                       </li>
                     </ul>
                   </div>
                   <Separator className="my-4" />
-                  <div className="grid grid-cols-2 gap-4">
+                  {/* <div className="grid grid-cols-2 gap-4">
                     <div className="grid gap-3">
                       <div className="font-semibold">Shipping Information</div>
                       <address className="grid gap-0.5 not-italic text-muted-foreground">
@@ -724,11 +782,11 @@ export default async function Home() {
                         <dd>**** **** **** 4532</dd>
                       </div>
                     </dl>
-                  </div>
+                  </div> */}
                 </CardContent>
                 <CardFooter className="flex flex-row items-center border-t bg-muted/50 px-6 py-3">
                   <div className="text-xs text-muted-foreground">
-                    Updated <time dateTime="2023-11-23">November 23, 2023</time>
+                    <time dateTime="2023-11-23">Page 1</time>
                   </div>
                   <Pagination className="ml-auto mr-0 w-auto">
                     <PaginationContent>
