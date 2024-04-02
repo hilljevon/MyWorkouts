@@ -1,31 +1,119 @@
 export const splits = [
     {
-        id: 'back',
+        id: 'Back',
         label: 'Back'
     },
     {
-        id: 'biceps',
+        id: 'Biceps',
         label: 'Biceps'
     },
     {
-        id: 'cardio',
+        id: 'Cardio',
         label: 'Cardio'
     },
     {
-        id: 'chest',
+        id: 'Chest',
         label: 'Chest'
     },
     {
-        id: 'legs',
+        id: 'Legs',
         label: 'Legs'
     },
     {
-        id: 'shoulders',
+        id: 'Shoulders',
         label: 'Shoulders'
     },
 
     {
-        id: 'triceps',
+        id: 'Triceps',
         label: 'Triceps'
     },
 ]
+// export const exercisesList = [
+//     {
+//         name: 'DB Bench Press',
+//         selected: false
+//     },
+//     {
+//         name: 'DB Incline Bench Press',
+//         selected: false
+//     },
+//     {
+//         name: "DB Fly's",
+//         selected: false
+//     },
+//     {
+//         name: "DB Pullover's",
+//         selected: false
+//     },
+//     {
+//         name: "Stairmaster",
+//         selected: false
+//     },
+//     {
+//         name: "Running",
+//         selected: false
+//     },
+//     {
+//         name: "Cable Rows",
+//         selected: false
+//     },
+//     {
+//         name: "Lat Pull Downs",
+//         selected: false
+//     },
+//     {
+//         name: "Lat Pullovers",
+//         selected: false
+//     },
+//     {
+//         name: "Neutral Grip T-Bar Rows",
+//         selected: false
+//     },
+//     {
+//         name: "Angle Grip T-Bar Rows",
+//         selected: false
+//     },
+//     {
+//         name: "Single Arm Row Machine",
+//         selected: false
+//     },
+//     {
+//         name: "Hack Squat",
+//         selected: false
+//     },
+//     {
+//         name: "Leg Extensions",
+//         selected: false
+//     },
+//     {
+//         name: "Hamstring Curls",
+//         selected: false
+//     },
+//     {
+//         name: "Hamstring Curls (Lying Down)",
+//         selected: false
+//     },
+//     {
+//         name: "Barbell Lunges",
+//         selected: false
+//     },
+//     {
+//         name: "DB Shoulder Press",
+//         selected: false
+//     },
+//     {
+//         name: "DB Back Lateral Raises",
+//         selected: false
+//     },
+//     {
+//         name: "DB Side Lateral Raises",
+//         selected: false
+//     },
+//     {
+//         name: "DB Front Lateral Raises",
+//         selected: false
+//     },
+
+
+// ]

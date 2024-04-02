@@ -362,7 +362,7 @@ export default async function Home() {
                   <CardHeader className="pb-3">
                     <CardTitle>Next up: Back + Bi</CardTitle>
                     <CardDescription className="max-w-lg text-balance leading-relaxed">
-                      A dynamic dashboard to view all of your gym analytics
+                      Select below to log your most recent workout.
                     </CardDescription>
                   </CardHeader>
                   <CardFooter className="pt-8">
