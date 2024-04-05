@@ -45,8 +45,9 @@ import { Copy } from "lucide-react"
 import { Label } from "@/components/ui/label"
 
 import { splits } from "@/lib"
-import { useState } from "react"
-
+import { ChangeEvent, useState } from "react"
+import { createNewWorkout } from "@/lib/actions/calls"
+import { ExercisesListInterface } from "@/lib/interfaces"
 const formSchema = z.object({
     date: z.date(),
     duration: z.coerce.number(),
@@ -56,119 +57,218 @@ const formSchema = z.object({
         message: "You have to select at least one item.",
     }),
 })
-interface ExercisesListInterface {
-    name: string,
-    selected: boolean
-}
+
 
 const NewWorkoutForm = () => {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             date: new Date(),
-            duration: 0,
-            calories: 0,
-            avg_hr: 0,
+            duration: 60,
+            calories: 1000,
+            avg_hr: 130,
             splits: []
         },
     })
 
-    const [exercisesList, setExercisesList] = useState([
+    const [exercisesList, setExercisesList] = useState<ExercisesListInterface[]>([
         {
-            name: 'DB Bench Press',
-            selected: false
+            exercise_id: 'DB Bench Press',
+            selected: false,
+            reps: 0,
+            sets: 0,
+            weight: 0,
+            distance: 0,
+            time: 0
         },
         {
-            name: 'DB Incline Bench Press',
-            selected: false
+            exercise_id: 'DB Incline Bench Press',
+            selected: false,
+            reps: 0,
+            sets: 0,
+            weight: 0,
+            distance: 0,
+            time: 0
         },
         {
-            name: "DB Fly's",
-            selected: false
+            exercise_id: "DB Fly's",
+            selected: false,
+            reps: 0,
+            sets: 0,
+            weight: 0,
+            distance: 0,
+            time: 0
         },
         {
-            name: "DB Pullover's",
-            selected: false
+            exercise_id: "DB Pullover's",
+            selected: false,
+            reps: 0,
+            sets: 0,
+            weight: 0,
+            distance: 0,
+            time: 0
         },
         {
-            name: "Stairmaster",
-            selected: false
+            exercise_id: "Stairmaster",
+            selected: false,
+            reps: 0,
+            sets: 0,
+            weight: 0,
+            distance: 0,
+            time: 0
         },
         {
-            name: "Running",
-            selected: false
+            exercise_id: "Running",
+            selected: false,
+            reps: 0,
+            sets: 0,
+            weight: 0,
+            distance: 0,
+            time: 0
         },
         {
-            name: "Cable Rows",
-            selected: false
+            exercise_id: "Cable Rows",
+            selected: false,
+            reps: 0,
+            sets: 0,
+            weight: 0,
+            distance: 0,
+            time: 0
         },
         {
-            name: "Lat Pull Downs",
-            selected: false
+            exercise_id: "Lat Pull Downs",
+            selected: false,
+            reps: 0,
+            sets: 0,
+            weight: 0,
+            distance: 0,
+            time: 0
         },
         {
-            name: "Lat Pullovers",
-            selected: false
+            exercise_id: "Lat Pullovers",
+            selected: false,
+            reps: 0,
+            sets: 0,
+            weight: 0,
+            distance: 0,
+            time: 0
         },
         {
-            name: "Neutral Grip T-Bar Rows",
-            selected: false
+            exercise_id: "Neutral Grip T-Bar Rows",
+            selected: false,
+            reps: 0,
+            sets: 0,
+            weight: 0,
+            distance: 0,
+            time: 0
         },
         {
-            name: "Angle Grip T-Bar Rows",
-            selected: false
+            exercise_id: "Angle Grip T-Bar Rows",
+            selected: false,
+            reps: 0,
+            sets: 0,
+            weight: 0,
+            distance: 0,
+            time: 0
         },
         {
-            name: "Single Arm Row Machine",
-            selected: false
+            exercise_id: "Single Arm Row Machine",
+            selected: false,
+            reps: 0,
+            sets: 0,
+            weight: 0,
+            distance: 0,
+            time: 0
         },
         {
-            name: "Hack Squat",
-            selected: false
+            exercise_id: "Hack Squat",
+            selected: false,
+            reps: 0,
+            sets: 0,
+            weight: 0,
+            distance: 0,
+            time: 0
         },
         {
-            name: "Leg Extensions",
-            selected: false
+            exercise_id: "Leg Extensions",
+            selected: false,
+            reps: 0,
+            sets: 0,
+            weight: 0,
+            distance: 0,
+            time: 0
         },
         {
-            name: "Hamstring Curls",
-            selected: false
+            exercise_id: "Hamstring Curls",
+            selected: false,
+            reps: 0,
+            sets: 0,
+            weight: 0,
+            distance: 0,
+            time: 0
         },
         {
-            name: "Hamstring Curls (Lying Down)",
-            selected: false
+            exercise_id: "Hamstring Curls (Lying Down)",
+            selected: false,
+            reps: 0,
+            sets: 0,
+            weight: 0,
+            distance: 0,
+            time: 0
         },
         {
-            name: "Barbell Lunges",
-            selected: false
+            exercise_id: "Barbell Lunges",
+            selected: false,
+            reps: 0,
+            sets: 0,
+            weight: 0,
+            distance: 0,
+            time: 0
         },
         {
-            name: "DB Shoulder Press",
-            selected: false
+            exercise_id: "DB Shoulder Press",
+            selected: false,
+            reps: 0,
+            sets: 0,
+            weight: 0,
+            distance: 0,
+            time: 0
         },
         {
-            name: "DB Back Lateral Raises",
-            selected: false
+            exercise_id: "DB Back Lateral Raises",
+            selected: false,
+            reps: 0,
+            sets: 0,
+            weight: 0,
+            distance: 0,
+            time: 0
         },
         {
-            name: "DB Side Lateral Raises",
-            selected: false
+            exercise_id: "DB Side Lateral Raises",
+            selected: false,
+            reps: 0,
+            sets: 0,
+            weight: 0,
+            distance: 0,
+            time: 0
         },
         {
-            name: "DB Front Lateral Raises",
-            selected: false
+            exercise_id: "DB Front Lateral Raises",
+            selected: false,
+            reps: 0,
+            sets: 0,
+            weight: 0,
+            distance: 0,
+            time: 0
         },
     ])
-    const [submittedExercises, setSubmittedExercises] = useState([''])
+    const [submittedExercises, setSubmittedExercises] = useState<ExercisesListInterface[]>([])
     const [selectedMuscleGroups, setSelectedMuscleGroups] = useState([''])
     const handleExerciseClick = (clickedName: string) => {
         setExercisesList((oldList) => {
             const newList = oldList.map((exercise: ExercisesListInterface) => {
-                if (exercise.name == clickedName) {
-                    return {
-                        name: exercise.name,
-                        selected: !exercise.selected
-                    }
+                if (exercise.exercise_id == clickedName) {
+                    return { ...exercise, selected: !exercise.selected }
                 } else {
                     return exercise
                 }
@@ -177,21 +277,43 @@ const NewWorkoutForm = () => {
         })
     }
     function onSubmit(values: z.infer<typeof formSchema>) {
-        const selectedExercises: string[] = []
+        const selectedExercises: ExercisesListInterface[] = []
         exercisesList.forEach((exercise: ExercisesListInterface) => {
             if (exercise.selected) {
-                selectedExercises.push(exercise.name)
+                selectedExercises.push(exercise)
             }
         })
         setSubmittedExercises(selectedExercises)
         setSelectedMuscleGroups(values.splits)
-        // console.log(values)
-        // console.log('MY EXERCISES HERE', selectedExercises)
     }
-    function finalSubmission() {
-        const data = form.getValues()
-        console.log('MY DATA HERRE', data)
-        console.log('submitted exercises', submittedExercises)
+    async function finalSubmission() {
+        const vals = form.getValues()
+        const exercises = submittedExercises.map((exercise: ExercisesListInterface) => {
+            const newExercise = {
+                distance: exercise.distance,
+                exercise_id: exercise.exercise_id,
+                reps: exercise.reps,
+                sets: exercise.sets,
+                time: exercise.time,
+                weight: exercise.weight
+            }
+            return newExercise
+        })
+        const res = await createNewWorkout(vals, exercises)
+        console.log('MY return statement here', res)
+    }
+    function handleExerciseChange(e: ChangeEvent<HTMLInputElement>, name: string, type: string) {
+        const val = e.target.value
+        setSubmittedExercises((oldExercises) => {
+            const updatedExercises = oldExercises.map((exercise: ExercisesListInterface) => {
+                if (exercise.exercise_id == name) {
+                    return { ...exercise, [type]: parseInt(val) }
+                } else {
+                    return exercise
+                }
+            })
+            return updatedExercises
+        })
     }
     return (
         <Form {...form}>
@@ -351,16 +473,16 @@ const NewWorkoutForm = () => {
                         <div className="grid grid-cols-2 md:grid-cols-3 gap-x-2 gap-y-3">
                             {exercisesList.map((exercise: ExercisesListInterface) => (
                                 <div
-                                    key={exercise.name}
+                                    key={exercise.exercise_id}
                                     className="col-span-1 mx-2">
                                     <Button
-                                        key={exercise.name}
+                                        key={exercise.exercise_id}
                                         variant={exercise.selected ? 'default' : 'outline'}
                                         size={'sm'}
-                                        onClick={() => handleExerciseClick(exercise.name)}
+                                        onClick={() => handleExerciseClick(exercise.exercise_id)}
                                         type="button"
                                     >
-                                        {exercise.name}
+                                        {exercise.exercise_id}
                                     </Button>
                                 </div>
                             ))}
@@ -375,7 +497,7 @@ const NewWorkoutForm = () => {
                     </DialogTrigger>
                     <DialogContent className="sm:max-w-md">
                         <DialogTitle>Please confirm workout details</DialogTitle>
-                        <div className="grid grid-cols-6 gap-x-6 gap-y-8 text-sm text-slate-500 dark:text-slate-400">
+                        <div className="grid grid-cols-6 gap-x-4 gap-y-4 text-sm text-slate-500 dark:text-slate-400">
                             <div className="col-span-full">
                                 <FormField
                                     control={form.control}
@@ -478,7 +600,7 @@ const NewWorkoutForm = () => {
                                 <p className="font-bold">Muscle Groups</p>
                                 <div className="grid grid-cols-6 gap-x-2 gap-y-2 py-2">
                                     {selectedMuscleGroups.map((muscleGroup: string, idx) => (
-                                        <div key={idx} className="col-span-3">
+                                        <div key={idx} className="col-span-2">
                                             <span className="m-2" key={idx}>
                                                 {idx + 1}. {muscleGroup}
                                             </span>
@@ -488,12 +610,39 @@ const NewWorkoutForm = () => {
                             </div>
                             <div className="col-span-full px-0-2">
                                 <p className="font-bold">Exercises</p>
-                                <div className="grid grid-cols-6 gap-x-2 gap-y-2 py-2">
-                                    {submittedExercises.map((exercise: string, idx) => (
-                                        <div key={exercise} className="col-span-3">
-                                            <span className="m-2" key={idx}>
-                                                {idx + 1}. {exercise}
-                                            </span>
+                                <div className="">
+                                    {submittedExercises.map((exercise: ExercisesListInterface, idx) => (
+                                        <div className="w-full grid grid-cols-8 gap-x-2 gap-y-2 py-2">
+                                            <div className="col-span-2">
+                                                {idx + 1}. {exercise.exercise_id}
+                                            </div>
+                                            {/* REPS */}
+                                            <div className="col-span-2">
+                                                <Label htmlFor="">Reps</Label>
+                                                <Input
+                                                    type="number"
+                                                    onChange={(e) => handleExerciseChange(e, exercise.exercise_id, 'reps')}
+                                                    value={exercise.reps}
+                                                />
+                                            </div>
+                                            {/* SETS  */}
+                                            <div className="col-span-2">
+                                                <Label htmlFor="">Sets</Label>
+                                                <Input
+                                                    type="number"
+                                                    onChange={(e) => handleExerciseChange(e, exercise.exercise_id, 'sets')}
+                                                    value={exercise.sets}
+                                                />
+                                            </div>
+                                            {/* WEIGHT */}
+                                            <div className="col-span-2">
+                                                <Label htmlFor="">Weight</Label>
+                                                <Input
+                                                    type="number"
+                                                    onChange={(e) => handleExerciseChange(e, exercise.exercise_id, 'weight')}
+                                                    value={exercise.weight}
+                                                />
+                                            </div>
                                         </div>
                                     ))}
                                 </div>

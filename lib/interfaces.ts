@@ -48,3 +48,23 @@ export type WorkoutExercisesInterface = {
     time: number | null,
     user_id: string
 }
+export type WorkoutInterface = {
+    id: string,
+    created_at: string | Date,
+    user_id: string | null,
+    date: string | null,
+    duration: number | null,
+    calories: number | null,
+    notes: string | null,
+    avg_hr: number | null,
+    splits: string[] | null
+}
+export type ExercisesListInterface = {
+    exercise_id: string,
+    selected: boolean,
+    reps: number,
+    sets: number,
+    weight: number,
+    distance: number,
+    time: number
+}

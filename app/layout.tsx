@@ -1,8 +1,67 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
+import Link from "next/link";
+import {
+  ActivityIcon,
+  Check,
+  ChevronLeft,
+  ChevronRight,
+  Copy,
+  CreditCard,
+  Edit2Icon,
+  File,
 
+  HomeIcon,
+
+  LineChart,
+  ListFilter,
+  MoreVertical,
+  Package,
+  Package2,
+  PanelLeft,
+  Search,
+  Settings,
+  ShoppingCart,
+  Truck,
+  Users2,
+  WeightIcon,
+} from "lucide-react"
 const inter = Inter({ subsets: ["latin"] });
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet"
+import { Button } from "@/components/ui/button"
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb"
+import { Input } from "@/components/ui/input";
+import AuthButton from "@/components/AuthButton";
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -16,7 +75,221 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <div className="flex min-h-screen w-full flex-col bg-muted/40">
+          <aside className="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex">
+            <nav className="flex flex-col items-center gap-4 px-2 sm:py-5">
+              {/* dashboard icon */}
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Link
+                      href="#"
+                      className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
+                    >
+                      <HomeIcon className="h-5 w-5" />
+                      <span className="sr-only">Dashboard</span>
+                    </Link>
+                  </TooltipTrigger>
+                  <TooltipContent side="right">Dashboard</TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+              {/* workouts icon */}
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Link
+                      href="/workouts"
+                      className="flex h-9 w-9 items-center justify-center rounded-lg bg-accent text-accent-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
+                    >
+                      <WeightIcon className="h-5 w-5" />
+                      <span className="sr-only">Workouts</span>
+                    </Link>
+                  </TooltipTrigger>
+                  <TooltipContent side="right">Workouts</TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+              {/* exercises icon */}
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Link
+                      href="#"
+                      className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
+                    >
+                      <ActivityIcon className="h-5 w-5" />
+                      <span className="sr-only">Exercises</span>
+                    </Link>
+                  </TooltipTrigger>
+                  <TooltipContent side="right">Exercises</TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+              {/* friends icon */}
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Link
+                      href="#"
+                      className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
+                    >
+                      <Users2 className="h-5 w-5" />
+                      <span className="sr-only">Friends</span>
+                    </Link>
+                  </TooltipTrigger>
+                  <TooltipContent side="right">Friends</TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+              {/* analytics */}
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Link
+                      href="#"
+                      className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
+                    >
+                      <LineChart className="h-5 w-5" />
+                      <span className="sr-only">Analytics</span>
+                    </Link>
+                  </TooltipTrigger>
+                  <TooltipContent side="right">Analytics</TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </nav>
+            {/* settings icon */}
+            <nav className="mt-auto flex flex-col items-center gap-4 px-2 sm:py-5">
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Link
+                      href="#"
+                      className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
+                    >
+                      <Settings className="h-5 w-5" />
+                      <span className="sr-only">Settings</span>
+                    </Link>
+                  </TooltipTrigger>
+                  <TooltipContent side="right">Settings</TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </nav>
+          </aside>
+          <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
+            {/* mobile menu */}
+            <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
+              <Sheet>
+                <SheetTrigger asChild>
+                  <Button size="icon" variant="outline" className="sm:hidden">
+                    <PanelLeft className="h-5 w-5" />
+                    <span className="sr-only">Toggle Menu</span>
+                  </Button>
+                </SheetTrigger>
+                <SheetContent side="left" className="sm:max-w-xs">
+                  <nav className="grid gap-6 text-lg font-medium">
+                    <Link
+                      href="#"
+                      className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
+                    >
+                      <HomeIcon className="h-5 w-5" />
+                      Dashboard
+                    </Link>
+                    <Link
+                      href="/workouts"
+                      className="flex items-center gap-4 px-2.5 text-foreground"
+                    >
+                      <WeightIcon className="h-5 w-5" />
+                      Workouts
+                    </Link>
+                    <Link
+                      href="#"
+                      className="flex items-center gap-4 px-2.5 text-foreground"
+                    >
+                      <ActivityIcon className="h-5 w-5" />
+                      Exercises
+                    </Link>
+                    <Link
+                      href="#"
+                      className="flex items-center gap-4 px-2.5 text-foreground"
+                    >
+                      <Users2 className="h-5 w-5" />
+                      Friends
+                    </Link>
+                    <Link
+                      href="#"
+                      className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
+                    >
+                      <LineChart className="h-5 w-5" />
+                      Analytics
+                    </Link>
+                    <Link
+                      href="#"
+                      className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
+                    >
+                      <Settings className="h-5 w-5" />
+                      Settings
+                    </Link>
+                  </nav>
+                </SheetContent>
+              </Sheet>
+              <Breadcrumb className="hidden md:flex">
+                <BreadcrumbList>
+                  <BreadcrumbItem>
+                    <BreadcrumbLink asChild>
+                      <Link href="#">Dashboard</Link>
+                    </BreadcrumbLink>
+                  </BreadcrumbItem>
+                  <BreadcrumbSeparator />
+                  <BreadcrumbItem>
+                    <BreadcrumbLink asChild>
+                      <Link href="#">Overview</Link>
+                    </BreadcrumbLink>
+                  </BreadcrumbItem>
+                  {/* <BreadcrumbSeparator />
+                            <BreadcrumbItem>
+                                <BreadcrumbPage>Workouts</BreadcrumbPage>
+                            </BreadcrumbItem> */}
+                </BreadcrumbList>
+              </Breadcrumb>
+              {/* searchbar */}
+              <div className="relative ml-auto flex-1 md:grow-0">
+                <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                <Input
+                  type="search"
+                  placeholder="Search..."
+                  className="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[336px]"
+                />
+              </div>
+              <AuthButton />
+              {/* right profile icon */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="overflow-hidden rounded-full"
+                  >
+                    {/* <Image
+                                    src="/placeholder-user.jpg"
+                                    width={36}
+                                    height={36}
+                                    alt="Avatar"
+                                    className="overflow-hidden"
+                                /> */}
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem>Settings</DropdownMenuItem>
+                  <DropdownMenuItem>Support</DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem>Logout</DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </header>
+            {children}
+          </div>
+        </div>
+      </body>
     </html>
   );
 }
