@@ -74,3 +74,25 @@ export async function createNewWorkout(overviewData: OverviewDataInterface, exer
         throw new Error(`Cannot create new workout. Error here: ${error.message}`)
     }
 }
+export async function workoutsPage() {
+    try {
+        const supabase = createClient()
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) return null
+        const { data: workouts } = await supabase
+            .from('workouts')
+            .select('*, workoutExercises(*)')
+            .order('date', { ascending: false })
+        console.log('inside server, workouts here', workouts)
+        if (!workouts) return null
+        const { data: workoutExercises } = await supabase
+            .from('workoutExercises')
+            .select('*')
+            .eq('user_id', user?.id)
+        console.log('Inside Server, workout Exercises here', workoutExercises)
+        if (!workoutExercises) return null
+        return { workouts, user, workoutExercises }
+    } catch (error: any) {
+        throw new Error(`Unable to get all recent workouts. Error here: ${error.message}`)
+    }
+}
