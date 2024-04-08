@@ -1,7 +1,7 @@
 export const splits = [
     {
         id: 'Back',
-        label: 'Back'
+        label: 'Back',
     },
     {
         id: 'Biceps',

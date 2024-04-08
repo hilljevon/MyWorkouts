@@ -96,3 +96,34 @@ export async function workoutsPage() {
         throw new Error(`Unable to get all recent workouts. Error here: ${error.message}`)
     }
 }
+export async function getExercises(muscleGroup: string) {
+    try {
+        const supabase = createClient()
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) return null
+        const { data: exercises } = await supabase
+            .from('exercises')
+            .select('id')
+            .eq('muscleGroup', muscleGroup)
+        if (!exercises) return null
+        return exercises
+
+    } catch (error: any) {
+        throw new Error(`Unable to get exercises from supabase. Error here: ${error.message}`)
+    }
+}
+export async function getExerciseData(exercise: string) {
+    try {
+        const supabase = createClient()
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) return null
+        const { data: workoutExercises } = await supabase
+            .from('workoutExercises')
+            .select('*')
+            .eq('exercise_id', exercise)
+        if (!workoutExercises) return null
+        return workoutExercises
+    } catch (error: any) {
+        throw new Error(`Unable to get exercise data. Error here: ${error.message}`)
+    }
+}

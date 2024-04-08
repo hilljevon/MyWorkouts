@@ -65,11 +65,11 @@ const page = async () => {
                     <div className="flex items-center">
                         <TabsList>
                             <TabsTrigger value="all">All</TabsTrigger>
-                            <TabsTrigger value="active">Week</TabsTrigger>
+                            {/* <TabsTrigger value="active">Week</TabsTrigger>
                             <TabsTrigger value="draft">Month</TabsTrigger>
                             <TabsTrigger value="archived" className="hidden sm:flex">
                                 Year
-                            </TabsTrigger>
+                            </TabsTrigger> */}
                         </TabsList>
                         <div className="ml-auto flex items-center gap-2">
                             <DropdownMenu>
@@ -112,7 +112,7 @@ const page = async () => {
                             <CardHeader>
                                 <CardTitle>Workouts</CardTitle>
                                 <CardDescription>
-                                    Manage your workouts and view ongoing performance.
+                                    Click a workout to view details.
                                 </CardDescription>
                             </CardHeader>
                             <CardContent>

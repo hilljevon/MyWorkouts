@@ -80,6 +80,7 @@ interface WorkoutOverviewInterface {
 }
 export default async function Home() {
   const { workouts, user, workoutExercises } = await getAllRecentWorkouts() as DashboardWorkoutData
+  if (!user) redirect('/login')
   if (!workouts) redirect('/login')
 
   return (

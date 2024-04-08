@@ -20,7 +20,7 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button"
-import { DollarSign, Minus, MoreHorizontal, Plus, PlusCircle } from 'lucide-react'
+import { Copy, DollarSign, Minus, MoreHorizontal, Plus, PlusCircle } from 'lucide-react'
 import {
     Drawer,
     DrawerClose,
@@ -83,6 +83,17 @@ import {
 } from "@/components/ui/card"
 import { Label } from './ui/label'
 import { Input } from './ui/input'
+import {
+    Dialog,
+    DialogClose,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog"
+
 const WorkoutTableRow = ({ workout }: { workout: DashboardWorkoutTableInterface }) => {
 
     console.log('My exercises here', workout.workoutExercises)
@@ -128,8 +139,8 @@ const WorkoutTableRow = ({ workout }: { workout: DashboardWorkoutTableInterface 
                     </TableRow>
                 </DrawerTrigger>
                 <DrawerContent>
-                    <div className="mx-auto w-full max-w-2xl">
-                        <DrawerHeader className='flex justify-center items-center flex-col'>
+                    <div className="mx-auto w-full max-w-2xl max-h-screen">
+                        <DrawerHeader className='flex justify-center items-center flex-col mt-2'>
                             <DrawerTitle>Workout: {workout.splits.join(' + ')} </DrawerTitle>
                             <DrawerDescription> {workout.date} </DrawerDescription>
                         </DrawerHeader>
@@ -137,7 +148,7 @@ const WorkoutTableRow = ({ workout }: { workout: DashboardWorkoutTableInterface 
                             {/* CALORIES CARD */}
                             <Card x-chunk="dashboard-01-chunk-0">
                                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                                    <CardTitle className="text-sm font-medium">
+                                    <CardTitle className="text-sm">
                                         Calories
                                     </CardTitle>
                                     {/* <DollarSign className="h-4 w-4 text-muted-foreground" /> */}
@@ -190,14 +201,7 @@ const WorkoutTableRow = ({ workout }: { workout: DashboardWorkoutTableInterface 
                                 </CardContent>
                             </Card>
                         </div>
-                        <Card className='mt-8'>
-                            <CardHeader>
-                                {/* <CardTitle>Exercises</CardTitle> */}
-                                {/* <CardDescription>
-                                    Lipsum dolor sit amet, consectetur adipiscing elit
-                                </CardDescription> */}
-                                Exercises
-                            </CardHeader>
+                        <Card className='mt-8 py-2'>
                             <CardContent>
                                 <Table>
                                     <TableHeader>
@@ -234,7 +238,6 @@ const WorkoutTableRow = ({ workout }: { workout: DashboardWorkoutTableInterface 
                                                 </TableCell>
                                             </TableRow>
                                         ))}
-
                                     </TableBody>
                                 </Table>
                             </CardContent>
@@ -246,7 +249,42 @@ const WorkoutTableRow = ({ workout }: { workout: DashboardWorkoutTableInterface 
                             </CardFooter> */}
                         </Card>
                         <DrawerFooter>
-                            <Button>Edit</Button>
+                            <Dialog>
+                                <DialogTrigger asChild>
+                                    <Button>Delete</Button>
+                                </DialogTrigger>
+                                <DialogContent className="sm:max-w-md">
+                                    <DialogHeader>
+                                        <DialogTitle>Share link</DialogTitle>
+                                        <DialogDescription>
+                                            Anyone who has this link will be able to view this.
+                                        </DialogDescription>
+                                    </DialogHeader>
+                                    <div className="flex items-center space-x-2">
+                                        <div className="grid flex-1 gap-2">
+                                            <Label htmlFor="link" className="sr-only">
+                                                Link
+                                            </Label>
+                                            <Input
+                                                id="link"
+                                                defaultValue="https://ui.shadcn.com/docs/installation"
+                                                readOnly
+                                            />
+                                        </div>
+                                        <Button type="submit" size="sm" className="px-3">
+                                            <span className="sr-only">Copy</span>
+                                            <Copy className="h-4 w-4" />
+                                        </Button>
+                                    </div>
+                                    <DialogFooter className="sm:justify-start">
+                                        <DialogClose asChild>
+                                            <Button type="button" variant="secondary">
+                                                Close
+                                            </Button>
+                                        </DialogClose>
+                                    </DialogFooter>
+                                </DialogContent>
+                            </Dialog>
                             <DrawerClose asChild>
                                 <Button variant="outline">Close</Button>
                             </DrawerClose>
