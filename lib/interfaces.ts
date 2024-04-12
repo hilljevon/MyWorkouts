@@ -66,5 +66,23 @@ export type ExercisesListInterface = {
     sets: number,
     weight: number,
     distance: number,
-    time: number
+    time: number,
+    muscleGroup?: string
+}
+
+export type ExercisesPageTableInterface = {
+    id: string,
+    created_at: string,
+    workout_id: string,
+    exercise_id: string,
+    reps: number | null,
+    sets: number | null,
+    weight: number | null,
+    distance: number | null,
+    time: number | null,
+    user_id: string,
+    workouts: {
+        date: string | null,
+        splits: string[] | null
+    } | [] | null
 }

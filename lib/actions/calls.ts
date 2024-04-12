@@ -119,9 +119,10 @@ export async function getExerciseData(exercise: string) {
         if (!user) return null
         const { data: workoutExercises } = await supabase
             .from('workoutExercises')
-            .select('*')
+            .select('*, workouts(date, splits)')
             .eq('exercise_id', exercise)
         if (!workoutExercises) return null
+        console.log('MY WORKOUT EXERCISES HERE',)
         return workoutExercises
     } catch (error: any) {
         throw new Error(`Unable to get exercise data. Error here: ${error.message}`)

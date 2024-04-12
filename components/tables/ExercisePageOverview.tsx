@@ -1,10 +1,9 @@
 'use client'
+import React from 'react'
 import { WorkoutExercisesInterface } from '@/lib/interfaces'
-import React, { useEffect } from 'react'
 import { Crosshair, Repeat, Repeat1, Repeat2Icon } from "lucide-react"
 import { Card, CardHeader, CardContent, CardTitle } from '../ui/card'
 import { Line, LineChart, ResponsiveContainer, Tooltip } from "recharts"
-
 const data = [
     {
         average: 400,
@@ -35,16 +34,16 @@ const data = [
         today: 430,
     },
 ]
-
-const ExercisesPageIndividual = ({ exercises }: { exercises: WorkoutExercisesInterface[] }) => {
-    console.log('My exercises here', exercises)
+const ExercisePageOverview = ({ exercises }: { exercises: WorkoutExercisesInterface[] | null }) => {
+    console.log('MY EXERCISES HERE', exercises)
+    if (!exercises) return null
     return (
         <>
             <div className='w-full grid grid-cols-6 space-x-4'>
                 <div className="col-span-2">
                     <Card className='flex flex-col'>
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">Max</CardTitle>
+                            <CardTitle className="text-sm font-medium"> Max </CardTitle>
                             <Crosshair className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent className='flex flex-col h-full justify-around'>
@@ -164,8 +163,4 @@ const ExercisesPageIndividual = ({ exercises }: { exercises: WorkoutExercisesInt
     )
 }
 
-export default ExercisesPageIndividual
-
-
-
-
+export default ExercisePageOverview

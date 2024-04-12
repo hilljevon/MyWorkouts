@@ -44,8 +44,8 @@ import { Copy } from "lucide-react"
 
 import { Label } from "@/components/ui/label"
 
-import { splits } from "@/lib"
-import { ChangeEvent, useState } from "react"
+import { masterExerciseList, splits } from "@/lib"
+import { ChangeEvent, useEffect, useState } from "react"
 import { createNewWorkout } from "@/lib/actions/calls"
 import { ExercisesListInterface } from "@/lib/interfaces"
 const formSchema = z.object({
@@ -70,200 +70,13 @@ const NewWorkoutForm = () => {
             splits: []
         },
     })
-
-    const [exercisesList, setExercisesList] = useState<ExercisesListInterface[]>([
-        {
-            exercise_id: 'DB Bench Press',
-            selected: false,
-            reps: 0,
-            sets: 0,
-            weight: 0,
-            distance: 0,
-            time: 0
-        },
-        {
-            exercise_id: 'DB Incline Bench Press',
-            selected: false,
-            reps: 0,
-            sets: 0,
-            weight: 0,
-            distance: 0,
-            time: 0
-        },
-        {
-            exercise_id: "DB Fly's",
-            selected: false,
-            reps: 0,
-            sets: 0,
-            weight: 0,
-            distance: 0,
-            time: 0
-        },
-        {
-            exercise_id: "DB Pullover's",
-            selected: false,
-            reps: 0,
-            sets: 0,
-            weight: 0,
-            distance: 0,
-            time: 0
-        },
-        {
-            exercise_id: "Stairmaster",
-            selected: false,
-            reps: 0,
-            sets: 0,
-            weight: 0,
-            distance: 0,
-            time: 0
-        },
-        {
-            exercise_id: "Running",
-            selected: false,
-            reps: 0,
-            sets: 0,
-            weight: 0,
-            distance: 0,
-            time: 0
-        },
-        {
-            exercise_id: "Cable Rows",
-            selected: false,
-            reps: 0,
-            sets: 0,
-            weight: 0,
-            distance: 0,
-            time: 0
-        },
-        {
-            exercise_id: "Lat Pull Downs",
-            selected: false,
-            reps: 0,
-            sets: 0,
-            weight: 0,
-            distance: 0,
-            time: 0
-        },
-        {
-            exercise_id: "Lat Pullovers",
-            selected: false,
-            reps: 0,
-            sets: 0,
-            weight: 0,
-            distance: 0,
-            time: 0
-        },
-        {
-            exercise_id: "Neutral Grip T-Bar Rows",
-            selected: false,
-            reps: 0,
-            sets: 0,
-            weight: 0,
-            distance: 0,
-            time: 0
-        },
-        {
-            exercise_id: "Angle Grip T-Bar Rows",
-            selected: false,
-            reps: 0,
-            sets: 0,
-            weight: 0,
-            distance: 0,
-            time: 0
-        },
-        {
-            exercise_id: "Single Arm Row Machine",
-            selected: false,
-            reps: 0,
-            sets: 0,
-            weight: 0,
-            distance: 0,
-            time: 0
-        },
-        {
-            exercise_id: "Hack Squat",
-            selected: false,
-            reps: 0,
-            sets: 0,
-            weight: 0,
-            distance: 0,
-            time: 0
-        },
-        {
-            exercise_id: "Leg Extensions",
-            selected: false,
-            reps: 0,
-            sets: 0,
-            weight: 0,
-            distance: 0,
-            time: 0
-        },
-        {
-            exercise_id: "Hamstring Curls",
-            selected: false,
-            reps: 0,
-            sets: 0,
-            weight: 0,
-            distance: 0,
-            time: 0
-        },
-        {
-            exercise_id: "Hamstring Curls (Lying Down)",
-            selected: false,
-            reps: 0,
-            sets: 0,
-            weight: 0,
-            distance: 0,
-            time: 0
-        },
-        {
-            exercise_id: "Barbell Lunges",
-            selected: false,
-            reps: 0,
-            sets: 0,
-            weight: 0,
-            distance: 0,
-            time: 0
-        },
-        {
-            exercise_id: "DB Shoulder Press",
-            selected: false,
-            reps: 0,
-            sets: 0,
-            weight: 0,
-            distance: 0,
-            time: 0
-        },
-        {
-            exercise_id: "DB Back Lateral Raises",
-            selected: false,
-            reps: 0,
-            sets: 0,
-            weight: 0,
-            distance: 0,
-            time: 0
-        },
-        {
-            exercise_id: "DB Side Lateral Raises",
-            selected: false,
-            reps: 0,
-            sets: 0,
-            weight: 0,
-            distance: 0,
-            time: 0
-        },
-        {
-            exercise_id: "DB Front Lateral Raises",
-            selected: false,
-            reps: 0,
-            sets: 0,
-            weight: 0,
-            distance: 0,
-            time: 0
-        },
-    ])
+    const [exercisesList, setExercisesList] = useState<ExercisesListInterface[]>([])
     const [submittedExercises, setSubmittedExercises] = useState<ExercisesListInterface[]>([])
     const [selectedMuscleGroups, setSelectedMuscleGroups] = useState([''])
+    useEffect(() => {
+        setExercisesList(masterExerciseList)
+    }, [])
+    useEffect(() => { }, [])
     const handleExerciseClick = (clickedName: string) => {
         setExercisesList((oldList) => {
             const newList = oldList.map((exercise: ExercisesListInterface) => {
@@ -398,7 +211,6 @@ const NewWorkoutForm = () => {
                             )}
                         />
                     </div>
-
                     <div className="col-span-2">
                         {/* average HR */}
                         <FormField

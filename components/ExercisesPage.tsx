@@ -13,9 +13,11 @@ import {
 
 import { useEffect, useState } from "react"
 import { getExerciseData, getExercises } from "@/lib/actions/calls"
-import ExercisesPageIndividual from "./tables/ExercisesPageIndividual"
-import ExerciseOverviewTable from "./tables/ExerciseOverviewTable"
-import { WorkoutExercisesInterface } from "@/lib/interfaces"
+import ExercisesPageIndividual from "./tables/ExercisePageTable"
+import ExerciseOverviewTable from "./tables/ExercisePageOverview"
+import { ExercisesPageTableInterface, WorkoutExercisesInterface } from "@/lib/interfaces"
+import ExercisePageTable from "./tables/ExercisePageTable"
+import ExercisePageOverview from "./tables/ExercisePageOverview"
 interface ExercisesArrayInterface {
     id: string
 }
@@ -24,8 +26,8 @@ const ExercisesPage = () => {
     const [currentSplit, setCurrentSplit] = useState<string>('Chest')
     const [exercisesArray, setExercisesArray] = useState<ExercisesArrayInterface[] | null>([])
     const [selectedExercise, setSelectedExercise] = useState<string>('')
-    const [displayType, setDisplayType] = useState<string>('Individual')
-    const [fetchedExerciseData, setFetchedExerciseData] = useState<WorkoutExercisesInterface[] | null>([])
+    const [displayType, setDisplayType] = useState<string>('Table')
+    const [fetchedExerciseData, setFetchedExerciseData] = useState<ExercisesPageTableInterface[] | null>(null)
     // whenever we change the workout type, we make a call to our supabase client to fetch all the 
     useEffect(() => {
         const getAssociatedExercises = async () => {
@@ -141,7 +143,7 @@ const ExercisesPage = () => {
                             <Select
                                 value={displayType}
                                 onValueChange={setDisplayType}
-                                disabled
+
                             >
                                 <SelectTrigger
                                     id="exerciseOverview"
@@ -151,17 +153,17 @@ const ExercisesPage = () => {
                                     <SelectValue placeholder="Overview" />
                                 </SelectTrigger>
                                 <SelectContent >
+                                    <SelectItem value='Table'>
+                                        <div className="flex items-center gap-3 text-muted-foreground">
+                                            <p>
+                                                Table
+                                            </p>
+                                        </div>
+                                    </SelectItem>
                                     <SelectItem value='Overview'>
                                         <div className="flex items-center gap-3 text-muted-foreground">
                                             <p>
                                                 Overview
-                                            </p>
-                                        </div>
-                                    </SelectItem>
-                                    <SelectItem value='Individual'>
-                                        <div className="flex items-center gap-3 text-muted-foreground">
-                                            <p>
-                                                Individual
                                             </p>
                                         </div>
                                     </SelectItem>
@@ -177,13 +179,17 @@ const ExercisesPage = () => {
 
                 </div>
             </div>
-            <div className="relative flex h-full min-h-[50vh] flex-col rounded-xl bg-muted/50 p-4 lg:col-span-2">
-                <div className="flex w-full">
-                    {fetchedExerciseData && (
-                        <ExercisesPageIndividual exercises={fetchedExerciseData} />
-                    )}
+            {fetchedExerciseData && (
+                <div className="relative flex h-full min-h-[50vh] flex-col rounded-xl bg-muted/50 p-4 lg:col-span-2">
+                    <div className="flex w-full">
+                        {displayType == 'Table' ? (
+                            <ExercisePageTable exercises={fetchedExerciseData} />
+                        ) : (
+                            <ExercisePageOverview exercises={fetchedExerciseData} />
+                        )}
+                    </div>
                 </div>
-            </div>
+            )}
         </>
     )
 }
