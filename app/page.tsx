@@ -64,6 +64,7 @@ import {
 import { getAllRecentWorkouts } from "@/lib/actions/calls";
 import { DashboardWorkoutTableInterface, SupabaseUserInterface, WorkoutExercisesInterface } from "@/lib/interfaces";
 import NewWorkoutForm from "@/components/forms/NewWorkoutForm";
+import { createClient } from "@/utils/supabase/server";
 
 interface DashboardWorkoutData {
   workouts: DashboardWorkoutTableInterface[] | null,
@@ -82,8 +83,23 @@ interface WorkoutOverviewInterface {
   time: number | null,
 }
 export default async function Home() {
-  const { workouts, user, workoutExercises } = await getAllRecentWorkouts() as DashboardWorkoutData
-  if (!workouts) redirect('/login')
+
+  const supabase = createClient()
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return null
+  const { data: workouts } = await supabase
+    .from('workouts')
+    .select('*, workoutExercises(*)')
+    .order('date', { ascending: false })
+  if (!workouts) return null
+  const { data: workoutExercises } = await supabase
+    .from('workoutExercises')
+    .select()
+    .eq('user_id', user?.id)
+  if (!workoutExercises) return null
+
+  // const { workouts, user, workoutExercises } = await getAllRecentWorkouts() as DashboardWorkoutData
+  // if (!workouts) redirect('/login')
 
 
   return (
@@ -205,7 +221,8 @@ export default async function Home() {
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      {workouts.map((workout: DashboardWorkoutTableInterface) => (
+
+                      {/* {workouts.map((workout: DashboardWorkoutTableInterface) => (
                         <TableRow key={workout.id} className="bg-accent">
                           <TableCell>
                             <div className="font-medium text-md">
@@ -224,7 +241,7 @@ export default async function Home() {
                             </Badge>
                           </TableCell>
                         </TableRow>
-                      ))}
+                      ))} */}
                     </TableBody>
                   </Table>
                 </CardContent>
@@ -237,7 +254,7 @@ export default async function Home() {
             <CardHeader className="flex flex-row items-start bg-muted/50">
               <div className="grid gap-0.5">
                 <CardTitle className="group flex items-center gap-2 text-lg">
-                  Last Workout: {workouts[0].splits.join('/')}
+                  {/* Last Workout: {workouts?[0].splits.join('/')} */}
                   <Button
                     size="icon"
                     variant="outline"
