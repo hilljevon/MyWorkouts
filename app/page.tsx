@@ -97,11 +97,7 @@ export default async function Home() {
     .select()
     .eq('user_id', user?.id)
   if (!workoutExercises) return null
-
-  // const { workouts, user, workoutExercises } = await getAllRecentWorkouts() as DashboardWorkoutData
-  // if (!workouts) redirect('/login')
-
-
+  console.log('my workouts here', workouts)
   return (
     <>
       <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 lg:grid-cols-3 xl:grid-cols-3">
@@ -221,27 +217,28 @@ export default async function Home() {
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-
-                      {/* {workouts.map((workout: DashboardWorkoutTableInterface) => (
-                        <TableRow key={workout.id} className="bg-accent">
-                          <TableCell>
-                            <div className="font-medium text-md">
-                              {workout.splits.join(' + ')}
-                            </div>
-                            <div className="hidden text-xs text-slate-400 md:inline">
-                              {workout.date}
-                            </div>
-                          </TableCell>
-                          <TableCell className="hidden sm:table-cell">
-                            {workout.duration}
-                          </TableCell>
-                          <TableCell className="hidden sm:table-cell">
-                            <Badge className="text-xs" variant="secondary">
-                              {workout.calories}
-                            </Badge>
-                          </TableCell>
-                        </TableRow>
-                      ))} */}
+                      {workouts && (
+                        workouts.map((workout) => (
+                          <TableRow key={workout.id} className="bg-accent">
+                            <TableCell>
+                              <div className="font-medium text-md">
+                                {workout.splits?.join(' + ')}
+                              </div>
+                              <div className="hidden text-xs text-slate-400 md:inline">
+                                {workout.date}
+                              </div>
+                            </TableCell>
+                            <TableCell className="hidden sm:table-cell">
+                              {workout.duration}
+                            </TableCell>
+                            <TableCell className="hidden sm:table-cell">
+                              <Badge className="text-xs" variant="secondary">
+                                {workout.calories}
+                              </Badge>
+                            </TableCell>
+                          </TableRow>
+                        ))
+                      )}
                     </TableBody>
                   </Table>
                 </CardContent>
@@ -254,7 +251,7 @@ export default async function Home() {
             <CardHeader className="flex flex-row items-start bg-muted/50">
               <div className="grid gap-0.5">
                 <CardTitle className="group flex items-center gap-2 text-lg">
-                  {/* Last Workout: {workouts?[0].splits.join('/')} */}
+                  Last Workout: {workouts[0].splits}
                   <Button
                     size="icon"
                     variant="outline"

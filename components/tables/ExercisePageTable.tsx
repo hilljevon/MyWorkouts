@@ -20,8 +20,9 @@ import { ExercisesPageTableInterface } from '@/lib/interfaces'
 
 
 const ExercisePageTable = ({ exercises }: { exercises: ExercisesPageTableInterface[] | null }) => {
-    console.log('My exercises here', exercises)
+
     if (!exercises) return null
+    console.log('my exercises here', exercises)
     return (
         <>
             <Card className='w-full'>

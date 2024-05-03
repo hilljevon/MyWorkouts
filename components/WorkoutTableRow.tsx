@@ -96,7 +96,6 @@ import {
 
 const WorkoutTableRow = ({ workout }: { workout: DashboardWorkoutTableInterface }) => {
 
-    console.log('My exercises here', workout.workoutExercises)
     return (
         <>
             <Drawer key={workout.id}>
@@ -106,7 +105,7 @@ const WorkoutTableRow = ({ workout }: { workout: DashboardWorkoutTableInterface 
                         className='hover:cursor-pointer'
                     >
                         <TableCell className="font-medium">
-                            {workout.splits.join(' + ')}
+                            {workout.splits?.join(' + ')}
                         </TableCell>
                         <TableCell className="hidden md:table-cell">
                             {workout.date}
@@ -141,7 +140,7 @@ const WorkoutTableRow = ({ workout }: { workout: DashboardWorkoutTableInterface 
                 <DrawerContent>
                     <div className="mx-auto w-full max-w-2xl max-h-screen">
                         <DrawerHeader className='flex justify-center items-center flex-col mt-2'>
-                            <DrawerTitle>Workout: {workout.splits.join(' + ')} </DrawerTitle>
+                            <DrawerTitle>Workout: {workout.splits?.join(' + ')} </DrawerTitle>
                             <DrawerDescription> {workout.date} </DrawerDescription>
                         </DrawerHeader>
                         <div className='grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4'>

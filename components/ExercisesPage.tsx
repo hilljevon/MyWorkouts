@@ -18,6 +18,7 @@ import ExerciseOverviewTable from "./tables/ExercisePageOverview"
 import { ExercisesPageTableInterface, WorkoutExercisesInterface } from "@/lib/interfaces"
 import ExercisePageTable from "./tables/ExercisePageTable"
 import ExercisePageOverview from "./tables/ExercisePageOverview"
+import { createClient } from "@/utils/supabase/client"
 interface ExercisesArrayInterface {
     id: string
 }
@@ -31,14 +32,28 @@ const ExercisesPage = () => {
     // whenever we change the workout type, we make a call to our supabase client to fetch all the 
     useEffect(() => {
         const getAssociatedExercises = async () => {
-            const associatedExercises = await getExercises(currentSplit)
-            setExercisesArray(associatedExercises)
+            const supabase = createClient()
+            const { data: { user } } = await supabase.auth.getUser();
+            if (!user) return null
+            const { data: exercises } = await supabase
+                .from('exercises')
+                .select('id')
+                .eq('muscleGroup', currentSplit)
+            if (!exercises) return null
+            setExercisesArray(exercises)
         }
         getAssociatedExercises()
     }, [currentSplit])
     const handleNewExercise = async () => {
-        const exerciseData = await getExerciseData(selectedExercise)
-        setFetchedExerciseData(exerciseData)
+        const supabase = createClient()
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) return null
+        const { data: workoutExercises } = await supabase
+            .from('workoutExercises')
+            .select('*, workouts(date, splits)')
+            .eq('exercise_id', selectedExercise)
+        if (!workoutExercises) return null
+        setFetchedExerciseData(workoutExercises)
     }
     return (
         <>
