@@ -1,5 +1,5 @@
 export type DashboardWorkoutTableInterface = {
-    id: string | null,
+    id: string,
     created_at: string | null,
     user_id: string | null,
     date: string | null,

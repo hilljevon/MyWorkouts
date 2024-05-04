@@ -93,9 +93,25 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
+import { createClient } from '@/utils/supabase/client'
+import { useRouter } from 'next/navigation'
+
 
 const WorkoutTableRow = ({ workout }: { workout: DashboardWorkoutTableInterface }) => {
-
+    const router = useRouter()
+    const handleDelete = async () => {
+        if (workout == null) return null
+        const supabase = createClient()
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) return null
+        const { data, error } = await supabase
+            .from('workouts')
+            .delete()
+            .eq('id', workout.id)
+            .select()
+        console.log('workout deleted')
+        router.push('/workouts')
+    }
     return (
         <>
             <Drawer key={workout.id}>
@@ -213,7 +229,7 @@ const WorkoutTableRow = ({ workout }: { workout: DashboardWorkoutTableInterface 
                                     </TableHeader>
                                     <TableBody>
                                         {workout.workoutExercises.map((exercise) => (
-                                            <TableRow>
+                                            <TableRow key={exercise.id}>
                                                 <TableCell className="font-semibold">
                                                     {exercise.exercise_id}
                                                 </TableCell>
@@ -254,13 +270,13 @@ const WorkoutTableRow = ({ workout }: { workout: DashboardWorkoutTableInterface 
                                 </DialogTrigger>
                                 <DialogContent className="sm:max-w-md">
                                     <DialogHeader>
-                                        <DialogTitle>Share link</DialogTitle>
+                                        <DialogTitle>Are you sure you want to delete this workout?</DialogTitle>
                                         <DialogDescription>
-                                            Anyone who has this link will be able to view this.
+                                            This action cannot be undone.
                                         </DialogDescription>
                                     </DialogHeader>
                                     <div className="flex items-center space-x-2">
-                                        <div className="grid flex-1 gap-2">
+                                        {/* <div className="grid flex-1 gap-2">
                                             <Label htmlFor="link" className="sr-only">
                                                 Link
                                             </Label>
@@ -269,16 +285,26 @@ const WorkoutTableRow = ({ workout }: { workout: DashboardWorkoutTableInterface 
                                                 defaultValue="https://ui.shadcn.com/docs/installation"
                                                 readOnly
                                             />
-                                        </div>
-                                        <Button type="submit" size="sm" className="px-3">
-                                            <span className="sr-only">Copy</span>
-                                            <Copy className="h-4 w-4" />
-                                        </Button>
+                                        </div> */}
+
+                                        {/* <Button type="button" size="sm" className="px-3">
+                                            Yes
+                                        </Button> */}
                                     </div>
                                     <DialogFooter className="sm:justify-start">
-                                        <DialogClose asChild>
-                                            <Button type="button" variant="secondary">
-                                                Close
+                                        <Button
+                                            type="button"
+                                            size="sm"
+                                            variant='destructive'
+                                            className="px-3"
+                                            onClick={handleDelete}
+                                        >
+
+                                            Yes
+                                        </Button>
+                                        <DialogClose>
+                                            <Button type="button" size="sm" variant="secondary">
+                                                No
                                             </Button>
                                         </DialogClose>
                                     </DialogFooter>

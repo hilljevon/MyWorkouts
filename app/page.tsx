@@ -87,17 +87,17 @@ export default async function Home() {
   const supabase = createClient()
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return null
-  const { data: workouts } = await supabase
+  const { data: workouts, count: workoutCount } = await supabase
     .from('workouts')
-    .select('*, workoutExercises(*)')
+    .select("*, workoutExercises(*)", { count: 'exact' })
     .order('date', { ascending: false })
   if (!workouts) return null
-  const { data: workoutExercises } = await supabase
+  const { data: workoutExercises, count: exercisesCount } = await supabase
     .from('workoutExercises')
-    .select()
+    .select('*', { count: 'exact' })
     .eq('user_id', user?.id)
   if (!workoutExercises) return null
-  console.log('my workouts here', workouts)
+
   return (
     <>
       <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 lg:grid-cols-3 xl:grid-cols-3">
@@ -105,7 +105,7 @@ export default async function Home() {
           <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
             <Card className="sm:col-span-2">
               <CardHeader className="pb-3">
-                <CardTitle>Next up: Back + Bi</CardTitle>
+                <CardTitle>Dashboard</CardTitle>
                 <CardDescription className="max-w-lg text-balance leading-relaxed">
                   Select below to log your most recent workout.
                 </CardDescription>
@@ -125,7 +125,7 @@ export default async function Home() {
             <Card>
               <CardHeader className="pb-2">
                 <CardDescription>Workouts</CardDescription>
-                <CardTitle className="text-4xl">3/5</CardTitle>
+                <CardTitle className="text-4xl"> {workoutCount} </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="text-xs text-muted-foreground">
@@ -138,8 +138,8 @@ export default async function Home() {
             </Card>
             <Card>
               <CardHeader className="pb-2">
-                <CardDescription>Calories</CardDescription>
-                <CardTitle className="text-3xl">1367</CardTitle>
+                <CardDescription>Exercises</CardDescription>
+                <CardTitle className="text-3xl"> {exercisesCount} </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="text-xs text-muted-foreground">
@@ -151,12 +151,12 @@ export default async function Home() {
               </CardFooter>
             </Card>
           </div>
-          <Tabs defaultValue="week">
+          <Tabs defaultValue="all">
             <div className="flex items-center">
               <TabsList>
-                <TabsTrigger value="week">Week</TabsTrigger>
-                <TabsTrigger value="month">Month</TabsTrigger>
-                <TabsTrigger value="year">Year</TabsTrigger>
+                <TabsTrigger value="all">All</TabsTrigger>
+                {/* <TabsTrigger value="month">Month</TabsTrigger>
+                <TabsTrigger value="year">Year</TabsTrigger> */}
               </TabsList>
               <div className="ml-auto flex items-center gap-2">
                 <DropdownMenu>
@@ -165,6 +165,7 @@ export default async function Home() {
                       variant="outline"
                       size="sm"
                       className="h-7 gap-1 text-sm"
+                      disabled
                     >
                       <ListFilter className="h-3.5 w-3.5" />
                       <span className="sr-only sm:not-sr-only">Filter</span>
@@ -184,17 +185,17 @@ export default async function Home() {
                     </DropdownMenuCheckboxItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
-                <Button
+                {/* <Button
                   size="sm"
                   variant="outline"
                   className="h-7 gap-1 text-sm"
                 >
                   <File className="h-3.5 w-3.5" />
                   <span className="sr-only sm:not-sr-only">Export</span>
-                </Button>
+                </Button> */}
               </div>
             </div>
-            <TabsContent value="week">
+            <TabsContent value="all">
               <Card>
                 <CardHeader className="px-7">
                   <CardTitle>Workouts</CardTitle>
