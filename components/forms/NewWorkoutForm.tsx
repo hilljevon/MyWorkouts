@@ -48,6 +48,7 @@ import { masterExerciseList, splits } from "@/lib"
 import { ChangeEvent, useEffect, useState } from "react"
 import { createNewWorkout } from "@/lib/actions/calls"
 import { ExercisesListInterface } from "@/lib/interfaces"
+import { createClient } from "@/utils/supabase/client"
 const formSchema = z.object({
     date: z.date(),
     duration: z.coerce.number(),
@@ -73,10 +74,25 @@ const NewWorkoutForm = () => {
     const [exercisesList, setExercisesList] = useState<ExercisesListInterface[]>([])
     const [submittedExercises, setSubmittedExercises] = useState<ExercisesListInterface[]>([])
     const [selectedMuscleGroups, setSelectedMuscleGroups] = useState([''])
+    const [currentSplit, setCurrentSplit] = useState<string>('Chest')
     useEffect(() => {
         setExercisesList(masterExerciseList)
     }, [])
-    useEffect(() => { }, [])
+    // HERE IS WHERE WE CAN GRAB ALL EXERCISES ACCORDING TO MUSCLE GROUP
+    // useEffect(() => {
+    //     const getAssociatedExercises = async () => {
+    //         const supabase = createClient()
+    //         const { data: { user } } = await supabase.auth.getUser();
+    //         if (!user) return null
+    //         const { data: exercises } = await supabase
+    //             .from('exercises')
+    //             .select('id')
+    //             .eq('muscleGroup', currentSplit)
+    //         if (!exercises) return null
+    //         setExercisesArray(exercises)
+    //     }
+    //     getAssociatedExercises()
+    // }, [currentSplit])
     const handleExerciseClick = (clickedName: string) => {
         setExercisesList((oldList) => {
             const newList = oldList.map((exercise: ExercisesListInterface) => {
@@ -132,7 +148,7 @@ const NewWorkoutForm = () => {
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4" action="">
                 <div className="grid sm:grid-cols-6 gap-x-6 gap-y-8">
-                    <div className="col-span-full">
+                    <div className="col-span-3">
                         {/* date */}
                         <FormField
                             control={form.control}
@@ -174,6 +190,67 @@ const NewWorkoutForm = () => {
                                 </FormItem>
                             )}
                         />
+                    </div>
+                    <div className="col-span-3">
+                        <Label htmlFor="model">Muscle Group</Label>
+                        <Select
+                            value={currentSplit}
+                            onValueChange={setCurrentSplit}
+                        >
+                            <SelectTrigger
+                                id="muscleGroup"
+                                className="items-start [&_[data-description]]:hidden"
+
+                            >
+                                <SelectValue placeholder="Select a muscle group" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="Chest">
+                                    <div className="flex items-center gap-3 text-muted-foreground">
+                                        <p>
+                                            Chest
+                                        </p>
+                                    </div>
+                                </SelectItem>
+                                <SelectItem value="Back">
+                                    <div className="flex items-center gap-3 text-muted-foreground">
+                                        <p>
+                                            Back
+                                        </p>
+                                    </div>
+                                </SelectItem>
+                                <SelectItem value="Legs">
+                                    <div className="flex items-center gap-3 text-muted-foreground">
+                                        <p>
+                                            Legs
+                                        </p>
+                                    </div>
+                                </SelectItem>
+                                <SelectItem value="Biceps">
+                                    <div className="flex items-center gap-3 text-muted-foreground">
+                                        <p>
+                                            Biceps
+                                        </p>
+                                    </div>
+                                </SelectItem>
+                                <SelectItem value="Triceps">
+                                    <div className="flex items-center gap-3 text-muted-foreground">
+                                        <p>
+                                            Triceps
+                                        </p>
+                                    </div>
+                                </SelectItem>
+                                <SelectItem value="Cardio">
+                                    <div className="flex items-center gap-3 text-muted-foreground">
+                                        <p>
+                                            Cardio
+                                        </p>
+                                    </div>
+                                </SelectItem>
+
+
+                            </SelectContent>
+                        </Select>
                     </div>
                     <div className="col-span-2">
                         {/* duration */}

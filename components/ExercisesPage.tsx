@@ -29,7 +29,7 @@ const ExercisesPage = () => {
     const [selectedExercise, setSelectedExercise] = useState<string>('')
     const [displayType, setDisplayType] = useState<string>('Table')
     const [fetchedExerciseData, setFetchedExerciseData] = useState<ExercisesPageTableInterface[] | null>(null)
-    // whenever we change the workout type, we make a call to our supabase client to fetch all the 
+    // whenever we change the workout type, we make a call to our supabase client to fetch all the workouts
     useEffect(() => {
         const getAssociatedExercises = async () => {
             const supabase = createClient()
